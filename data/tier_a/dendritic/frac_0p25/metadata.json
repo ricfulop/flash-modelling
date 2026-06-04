@@ -1,0 +1,11 @@
+{
+  "material": "W",
+  "morphology": "dendritic",
+  "target_frac": 0.25,
+  "seed": 1,
+  "supercell": [
+    16,
+    16,
+    16
+  ]
+}

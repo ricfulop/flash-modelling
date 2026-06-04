@@ -1,0 +1,10 @@
+morphology,target_frac,regime,confidence,bandwidth_eV,kF_l_proxy,W_over_B,polaron_proxy_eV,dominant_transport,case_dir
+ordered,0.25,INCONCLUSIVE,split,0.5120920417221695,0.19142857142857142,0.0,10.5,small-polaron/activated hopping candidate,data/tier_a/ordered/frac_0p25
+ordered,0.3,INCONCLUSIVE,split,0.0,0.0,inf,10.5,small-polaron/activated hopping candidate,data/tier_a/ordered/frac_0p30
+ordered,0.35,INCONCLUSIVE,split,0.0,0.0,inf,10.5,small-polaron/activated hopping candidate,data/tier_a/ordered/frac_0p35
+random,0.25,ANDERSON_LOCALIZED,strong,3.1087026661692905,0.06322188449848025,0.9650327876794857,10.5,small-polaron/activated hopping candidate,data/tier_a/random/frac_0p25
+random,0.3,QUANTUM_PERCOLATION_FRACTON,strong,3.0497472261199077,0.0643047619047619,0.9836880821814209,10.5,geometry-driven quantum percolation/fracton,data/tier_a/random/frac_0p30
+random,0.35,QUANTUM_PERCOLATION_FRACTON,strong,3.1046174357013263,0.048228571428571426,0.9663026321703004,10.5,geometry-driven quantum percolation/fracton,data/tier_a/random/frac_0p35
+dendritic,0.25,QUANTUM_PERCOLATION_FRACTON,strong,3.0247110398614003,0.06460952380952383,0.9918302807984816,10.5,geometry-driven quantum percolation/fracton,data/tier_a/dendritic/frac_0p25
+dendritic,0.3,QUANTUM_PERCOLATION_FRACTON,strong,3.0665187609505944,0.06742857142857143,0.9783080534847358,10.5,geometry-driven quantum percolation/fracton,data/tier_a/dendritic/frac_0p30
+dendritic,0.35,QUANTUM_PERCOLATION_FRACTON,strong,3.1428645718697874,0.055542857142857144,0.9545431982184353,10.5,geometry-driven quantum percolation/fracton,data/tier_a/dendritic/frac_0p35

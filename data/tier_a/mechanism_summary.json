@@ -1,0 +1,294 @@
+{
+  "cases": [
+    {
+      "morphology": "ordered",
+      "target_frac": 0.25,
+      "regime": "INCONCLUSIVE",
+      "confidence": "split",
+      "bandwidth_eV": 0.5120920417221695,
+      "kF_l_proxy": 0.19142857142857142,
+      "W_over_B": 0.0,
+      "polaron_proxy_eV": 10.5,
+      "dominant_transport": "small-polaron/activated hopping candidate",
+      "case_dir": "data/tier_a/ordered/frac_0p25"
+    },
+    {
+      "morphology": "ordered",
+      "target_frac": 0.3,
+      "regime": "INCONCLUSIVE",
+      "confidence": "split",
+      "bandwidth_eV": 0.0,
+      "kF_l_proxy": 0.0,
+      "W_over_B": Infinity,
+      "polaron_proxy_eV": 10.5,
+      "dominant_transport": "small-polaron/activated hopping candidate",
+      "case_dir": "data/tier_a/ordered/frac_0p30"
+    },
+    {
+      "morphology": "ordered",
+      "target_frac": 0.35,
+      "regime": "INCONCLUSIVE",
+      "confidence": "split",
+      "bandwidth_eV": 0.0,
+      "kF_l_proxy": 0.0,
+      "W_over_B": Infinity,
+      "polaron_proxy_eV": 10.5,
+      "dominant_transport": "small-polaron/activated hopping candidate",
+      "case_dir": "data/tier_a/ordered/frac_0p35"
+    },
+    {
+      "morphology": "random",
+      "target_frac": 0.25,
+      "regime": "ANDERSON_LOCALIZED",
+      "confidence": "strong",
+      "bandwidth_eV": 3.1087026661692905,
+      "kF_l_proxy": 0.06322188449848025,
+      "W_over_B": 0.9650327876794857,
+      "polaron_proxy_eV": 10.5,
+      "dominant_transport": "small-polaron/activated hopping candidate",
+      "case_dir": "data/tier_a/random/frac_0p25"
+    },
+    {
+      "morphology": "random",
+      "target_frac": 0.3,
+      "regime": "QUANTUM_PERCOLATION_FRACTON",
+      "confidence": "strong",
+      "bandwidth_eV": 3.0497472261199077,
+      "kF_l_proxy": 0.0643047619047619,
+      "W_over_B": 0.9836880821814209,
+      "polaron_proxy_eV": 10.5,
+      "dominant_transport": "geometry-driven quantum percolation/fracton",
+      "case_dir": "data/tier_a/random/frac_0p30"
+    },
+    {
+      "morphology": "random",
+      "target_frac": 0.35,
+      "regime": "QUANTUM_PERCOLATION_FRACTON",
+      "confidence": "strong",
+      "bandwidth_eV": 3.1046174357013263,
+      "kF_l_proxy": 0.048228571428571426,
+      "W_over_B": 0.9663026321703004,
+      "polaron_proxy_eV": 10.5,
+      "dominant_transport": "geometry-driven quantum percolation/fracton",
+      "case_dir": "data/tier_a/random/frac_0p35"
+    },
+    {
+      "morphology": "dendritic",
+      "target_frac": 0.25,
+      "regime": "QUANTUM_PERCOLATION_FRACTON",
+      "confidence": "strong",
+      "bandwidth_eV": 3.0247110398614003,
+      "kF_l_proxy": 0.06460952380952383,
+      "W_over_B": 0.9918302807984816,
+      "polaron_proxy_eV": 10.5,
+      "dominant_transport": "geometry-driven quantum percolation/fracton",
+      "case_dir": "data/tier_a/dendritic/frac_0p25"
+    },
+    {
+      "morphology": "dendritic",
+      "target_frac": 0.3,
+      "regime": "QUANTUM_PERCOLATION_FRACTON",
+      "confidence": "strong",
+      "bandwidth_eV": 3.0665187609505944,
+      "kF_l_proxy": 0.06742857142857143,
+      "W_over_B": 0.9783080534847358,
+      "polaron_proxy_eV": 10.5,
+      "dominant_transport": "geometry-driven quantum percolation/fracton",
+      "case_dir": "data/tier_a/dendritic/frac_0p30"
+    },
+    {
+      "morphology": "dendritic",
+      "target_frac": 0.35,
+      "regime": "QUANTUM_PERCOLATION_FRACTON",
+      "confidence": "strong",
+      "bandwidth_eV": 3.1428645718697874,
+      "kF_l_proxy": 0.055542857142857144,
+      "W_over_B": 0.9545431982184353,
+      "polaron_proxy_eV": 10.5,
+      "dominant_transport": "geometry-driven quantum percolation/fracton",
+      "case_dir": "data/tier_a/dendritic/frac_0p35"
+    }
+  ],
+  "details": {
+    "ordered_0p25": {
+      "criteria": [
+        {
+          "criterion": "Ioffe-Regel  (kF*l <~ 1 => band invalid)",
+          "value": "kF*l = 0.19",
+          "verdict": "band transport INVALID"
+        },
+        {
+          "criterion": "Anderson 3D  (W/B >~ 16.5 => localized)",
+          "value": "W/B = 0.0",
+          "verdict": "extended (not Anderson)"
+        },
+        {
+          "criterion": "Holstein  (E_p/2t > 1 => small polaron)",
+          "value": "E_p/2t = 65.62",
+          "verdict": "small-polaron hopping"
+        }
+      ],
+      "note": "kF_l is a TB connectivity proxy until DFT/Kubo calibration; frozen regime thresholds are otherwise unchanged."
+    },
+    "ordered_0p30": {
+      "criteria": [
+        {
+          "criterion": "Ioffe-Regel  (kF*l <~ 1 => band invalid)",
+          "value": "kF*l = 0.00",
+          "verdict": "band transport INVALID"
+        },
+        {
+          "criterion": "Anderson 3D  (W/B >~ 16.5 => localized)",
+          "value": "W/B = inf",
+          "verdict": "Anderson-localized"
+        },
+        {
+          "criterion": "Holstein  (E_p/2t > 1 => small polaron)",
+          "value": "E_p/2t = 65.62",
+          "verdict": "small-polaron hopping"
+        }
+      ],
+      "note": "kF_l is a TB connectivity proxy until DFT/Kubo calibration; frozen regime thresholds are otherwise unchanged."
+    },
+    "ordered_0p35": {
+      "criteria": [
+        {
+          "criterion": "Ioffe-Regel  (kF*l <~ 1 => band invalid)",
+          "value": "kF*l = 0.00",
+          "verdict": "band transport INVALID"
+        },
+        {
+          "criterion": "Anderson 3D  (W/B >~ 16.5 => localized)",
+          "value": "W/B = inf",
+          "verdict": "Anderson-localized"
+        },
+        {
+          "criterion": "Holstein  (E_p/2t > 1 => small polaron)",
+          "value": "E_p/2t = 65.62",
+          "verdict": "small-polaron hopping"
+        }
+      ],
+      "note": "kF_l is a TB connectivity proxy until DFT/Kubo calibration; frozen regime thresholds are otherwise unchanged."
+    },
+    "random_0p25": {
+      "criteria": [
+        {
+          "criterion": "Ioffe-Regel  (kF*l <~ 1 => band invalid)",
+          "value": "kF*l = 0.06",
+          "verdict": "band transport INVALID"
+        },
+        {
+          "criterion": "Anderson 3D  (W/B >~ 16.5 => localized)",
+          "value": "W/B = 1.0",
+          "verdict": "extended (not Anderson)"
+        },
+        {
+          "criterion": "Holstein  (E_p/2t > 1 => small polaron)",
+          "value": "E_p/2t = 65.62",
+          "verdict": "small-polaron hopping"
+        }
+      ],
+      "note": "kF_l is a TB connectivity proxy until DFT/Kubo calibration; frozen regime thresholds are otherwise unchanged."
+    },
+    "random_0p30": {
+      "criteria": [
+        {
+          "criterion": "Ioffe-Regel  (kF*l <~ 1 => band invalid)",
+          "value": "kF*l = 0.06",
+          "verdict": "band transport INVALID"
+        },
+        {
+          "criterion": "Anderson 3D  (W/B >~ 16.5 => localized)",
+          "value": "W/B = 1.0",
+          "verdict": "extended (not Anderson)"
+        },
+        {
+          "criterion": "Holstein  (E_p/2t > 1 => small polaron)",
+          "value": "E_p/2t = 65.62",
+          "verdict": "small-polaron hopping"
+        }
+      ],
+      "note": "kF_l is a TB connectivity proxy until DFT/Kubo calibration; frozen regime thresholds are otherwise unchanged."
+    },
+    "random_0p35": {
+      "criteria": [
+        {
+          "criterion": "Ioffe-Regel  (kF*l <~ 1 => band invalid)",
+          "value": "kF*l = 0.05",
+          "verdict": "band transport INVALID"
+        },
+        {
+          "criterion": "Anderson 3D  (W/B >~ 16.5 => localized)",
+          "value": "W/B = 1.0",
+          "verdict": "extended (not Anderson)"
+        },
+        {
+          "criterion": "Holstein  (E_p/2t > 1 => small polaron)",
+          "value": "E_p/2t = 65.62",
+          "verdict": "small-polaron hopping"
+        }
+      ],
+      "note": "kF_l is a TB connectivity proxy until DFT/Kubo calibration; frozen regime thresholds are otherwise unchanged."
+    },
+    "dendritic_0p25": {
+      "criteria": [
+        {
+          "criterion": "Ioffe-Regel  (kF*l <~ 1 => band invalid)",
+          "value": "kF*l = 0.06",
+          "verdict": "band transport INVALID"
+        },
+        {
+          "criterion": "Anderson 3D  (W/B >~ 16.5 => localized)",
+          "value": "W/B = 1.0",
+          "verdict": "extended (not Anderson)"
+        },
+        {
+          "criterion": "Holstein  (E_p/2t > 1 => small polaron)",
+          "value": "E_p/2t = 65.62",
+          "verdict": "small-polaron hopping"
+        }
+      ],
+      "note": "kF_l is a TB connectivity proxy until DFT/Kubo calibration; frozen regime thresholds are otherwise unchanged."
+    },
+    "dendritic_0p30": {
+      "criteria": [
+        {
+          "criterion": "Ioffe-Regel  (kF*l <~ 1 => band invalid)",
+          "value": "kF*l = 0.07",
+          "verdict": "band transport INVALID"
+        },
+        {
+          "criterion": "Anderson 3D  (W/B >~ 16.5 => localized)",
+          "value": "W/B = 1.0",
+          "verdict": "extended (not Anderson)"
+        },
+        {
+          "criterion": "Holstein  (E_p/2t > 1 => small polaron)",
+          "value": "E_p/2t = 65.62",
+          "verdict": "small-polaron hopping"
+        }
+      ],
+      "note": "kF_l is a TB connectivity proxy until DFT/Kubo calibration; frozen regime thresholds are otherwise unchanged."
+    },
+    "dendritic_0p35": {
+      "criteria": [
+        {
+          "criterion": "Ioffe-Regel  (kF*l <~ 1 => band invalid)",
+          "value": "kF*l = 0.06",
+          "verdict": "band transport INVALID"
+        },
+        {
+          "criterion": "Anderson 3D  (W/B >~ 16.5 => localized)",
+          "value": "W/B = 1.0",
+          "verdict": "extended (not Anderson)"
+        },
+        {
+          "criterion": "Holstein  (E_p/2t > 1 => small polaron)",
+          "value": "E_p/2t = 65.62",
+          "verdict": "small-polaron hopping"
+        }
+      ],
+      "note": "kF_l is a TB connectivity proxy until DFT/Kubo calibration; frozen regime thresholds are otherwise unchanged."
+    }
+  }
+}

@@ -1,0 +1,56 @@
+# Single source of truth for the W percolation emission run.
+material: W
+lattice_a: 3.165            # Angstrom, BCC W
+
+network:
+  morphology: dendrite      # dendrite (DLA) | random (site percolation)
+  target_frac: 0.25         # mol% defects (Frenkel-pair sites); >0.20 per the manuscript
+  supercell: [16, 16, 16]   # conventional cells for the geometry/transport graph
+  seed: 1
+  defect_type: frenkel_pair # vacancy + <111> SIA dumbbell
+
+slab:                       # smaller cell for DFT emission test
+  nx: 8
+  ny: 8
+  nz: 12
+  vacuum: 14.0              # Angstrom, on +z emission face only
+  surface_band: 8.0         # keep FP recombination within this depth of the surface
+
+drive_proxy:
+  Te_eV: 0.72               # electronic temperature = 8358 K (Mo Saha-Boltzmann)
+  T_L: 1000.0               # lattice temperature (K), from MACE-MD
+
+tight_binding:              # for transport_kpm (or replace with BigDFT support-fn H)
+  t_hop: 0.08               # inter-site transfer integral (eV) — set from DFT
+  disorder_W_ordered: 0.0   # ordered network (miniband test)
+  disorder_W_random: 3.0    # disordered comparison (Anderson test)
+
+kpm:
+  moments: 2048
+  random_vectors: 20
+  energies: 2000
+
+mlip:
+  foundation: mace-mp-0
+  committee_size: 3
+  al_rounds: 6
+  unc_threshold: 0.15       # eV/Ang force std to trigger DFT labeling
+
+bigdft:
+  hgrids: 0.35
+  ixc: PBE
+  linear_scaling: true
+  nproc: 40                 # MPI ranks across both nodes' Grace cores
+
+emission:
+  phi_eff: 4.55             # eV default (W); Tier B computes per-facet 4.36-4.95, report as range
+  E_FP_expected: [8.0, 13.0]  # eV, W Frenkel-pair enthalpy band (sanity)
+
+# ---- added by PLAN_UPDATE.md: blind adjudication ----
+experiment:
+  mode: adjudicate
+  morphologies: [ordered, random, dendritic]   # hypothesis basis set
+  frac_sweep: [0.25, 0.30, 0.35]               # transient FP band (NOT 1.4% remnant)
+  decision_module: regime_decision             # pre-registered thresholds; DO NOT retune
+  materials: [W, Mo]                           # W first; Mo = falsifiability cross-check
+  morphology_is_output: true                   # Stage 2.5: MLIP-anneal to find selected structure

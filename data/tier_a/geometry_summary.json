@@ -1,0 +1,121 @@
+{
+  "cases": [
+    {
+      "morphology": "ordered",
+      "target_frac": 0.25,
+      "case_dir": "data/tier_a/ordered/frac_0p25",
+      "frac": 0.25,
+      "n_defects": 2048,
+      "spanning": true,
+      "p_c_bcc": 0.246,
+      "D_f": 2.68334840268589,
+      "d_s": 1.405295426601145,
+      "d_w": 3.818910033993138,
+      "regime": "Alexander-Orbach / quantum-percolation (fracton, NOT Anderson)"
+    },
+    {
+      "morphology": "ordered",
+      "target_frac": 0.3,
+      "case_dir": "data/tier_a/ordered/frac_0p30",
+      "frac": 0.3125,
+      "n_defects": 2560,
+      "spanning": true,
+      "p_c_bcc": 0.246,
+      "D_f": 2.7986893461704057,
+      "d_s": 1.4361274165565308,
+      "d_w": 3.8975501949276237,
+      "regime": "Alexander-Orbach / quantum-percolation (fracton, NOT Anderson)"
+    },
+    {
+      "morphology": "ordered",
+      "target_frac": 0.35,
+      "case_dir": "data/tier_a/ordered/frac_0p35",
+      "frac": 0.34375,
+      "n_defects": 2816,
+      "spanning": true,
+      "p_c_bcc": 0.246,
+      "D_f": 2.8115944975517526,
+      "d_s": 1.5506195886408536,
+      "d_w": 3.6264142645278543,
+      "regime": "Alexander-Orbach / quantum-percolation (fracton, NOT Anderson)"
+    },
+    {
+      "morphology": "random",
+      "target_frac": 0.25,
+      "case_dir": "data/tier_a/random/frac_0p25",
+      "frac": 0.0401611328125,
+      "n_defects": 329,
+      "spanning": false,
+      "p_c_bcc": 0.246,
+      "D_f": 2.0215836712241417,
+      "d_s": 1.2200204533749623,
+      "d_w": 3.3140160324883112,
+      "regime": "Alexander-Orbach / quantum-percolation (fracton, NOT Anderson)"
+    },
+    {
+      "morphology": "random",
+      "target_frac": 0.3,
+      "case_dir": "data/tier_a/random/frac_0p30",
+      "frac": 0.1702880859375,
+      "n_defects": 1395,
+      "spanning": true,
+      "p_c_bcc": 0.246,
+      "D_f": 2.47739747544327,
+      "d_s": 1.296550759464454,
+      "d_w": 3.821520225658685,
+      "regime": "Alexander-Orbach / quantum-percolation (fracton, NOT Anderson)"
+    },
+    {
+      "morphology": "random",
+      "target_frac": 0.35,
+      "case_dir": "data/tier_a/random/frac_0p35",
+      "frac": 0.2996826171875,
+      "n_defects": 2455,
+      "spanning": true,
+      "p_c_bcc": 0.246,
+      "D_f": 2.687115589169846,
+      "d_s": 1.4367614041607875,
+      "d_w": 3.740517501915206,
+      "regime": "Alexander-Orbach / quantum-percolation (fracton, NOT Anderson)"
+    },
+    {
+      "morphology": "dendritic",
+      "target_frac": 0.25,
+      "case_dir": "data/tier_a/dendritic/frac_0p25",
+      "frac": 0.2215576171875,
+      "n_defects": 1815,
+      "spanning": true,
+      "p_c_bcc": 0.246,
+      "D_f": 2.5796696479957943,
+      "d_s": 1.5687920407663367,
+      "d_w": 3.28873372755723,
+      "regime": "Alexander-Orbach / quantum-percolation (fracton, NOT Anderson)"
+    },
+    {
+      "morphology": "dendritic",
+      "target_frac": 0.3,
+      "case_dir": "data/tier_a/dendritic/frac_0p30",
+      "frac": 0.2615966796875,
+      "n_defects": 2143,
+      "spanning": true,
+      "p_c_bcc": 0.246,
+      "D_f": 2.6097337552021833,
+      "d_s": 1.678143243130186,
+      "d_w": 3.110263400798053,
+      "regime": "intermediate critical network"
+    },
+    {
+      "morphology": "dendritic",
+      "target_frac": 0.35,
+      "case_dir": "data/tier_a/dendritic/frac_0p35",
+      "frac": 0.297119140625,
+      "n_defects": 2434,
+      "spanning": true,
+      "p_c_bcc": 0.246,
+      "D_f": 2.6538289139873488,
+      "d_s": 1.827275176131207,
+      "d_w": 2.904684470793458,
+      "regime": "intermediate critical network"
+    }
+  ]
+}

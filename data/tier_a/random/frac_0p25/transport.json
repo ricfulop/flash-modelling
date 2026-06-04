@@ -1,0 +1,48 @@
+{
+  "material": "W",
+  "morphology": "random",
+  "target_frac": 0.25,
+  "geometry": {
+    "frac": 0.0401611328125,
+    "n_defects": 329,
+    "spanning": false,
+    "p_c_bcc": 0.246,
+    "D_f": 2.0215836712241417,
+    "d_s": 1.2544494287543495,
+    "d_w": 3.2230612488405304,
+    "regime": "Alexander-Orbach / quantum-percolation (fracton, NOT Anderson)",
+    "spectral_t_max": 1000,
+    "spectral_walkers": 1000
+  },
+  "electronic": {
+    "n_sites_exact": 329,
+    "bandwidth_eV": 3.1087026661692905,
+    "r_stat": 0.3952213713191447,
+    "pr_frac_EF": 0.005157653320744022,
+    "xi_over_a": 0.1843306604702201,
+    "kF_l": 0.06322188449848025,
+    "W_over_B": 0.9650327876794857,
+    "diagnostic_note": "kF_l is a TB connectivity proxy until DFT/Kubo calibration; frozen regime thresholds are otherwise unchanged."
+  },
+  "regime_decision": {
+    "regime": "ANDERSON_LOCALIZED",
+    "confidence": "strong",
+    "rationale": [
+      "kF*l=0.06 <= 2.0: at/below Ioffe-Regel; band transport not a safe zeroth-order picture",
+      "<r>=0.395 <= 0.42 (Poisson/localized)",
+      "PR/N(E_F)=0.005 <= 0.01 (localized at E_F)",
+      "xi/a=0.2 < 5.0 (finite localization length)",
+      "localized, structure not fractal-percolating -> disorder-driven (Anderson) by default",
+      "(note W/B=1.0 below the 16.5 3D threshold; localization may be marginal)"
+    ],
+    "flags": []
+  },
+  "kpm_dos": {
+    "ran": true,
+    "device": "cuda",
+    "moments": 2048,
+    "random_vectors": 20,
+    "energies": 2000,
+    "dos_file": "kpm_dos.npz"
+  }
+}

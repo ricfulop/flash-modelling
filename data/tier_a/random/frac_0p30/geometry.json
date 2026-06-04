@@ -1,0 +1,12 @@
+{
+  "frac": 0.1702880859375,
+  "n_defects": 1395,
+  "spanning": true,
+  "p_c_bcc": 0.246,
+  "D_f": 2.47739747544327,
+  "d_s": 1.3616667237944267,
+  "d_w": 3.638772149090554,
+  "regime": "Alexander-Orbach / quantum-percolation (fracton, NOT Anderson)",
+  "spectral_t_max": 1000,
+  "spectral_walkers": 1000
+}

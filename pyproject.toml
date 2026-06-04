@@ -1,0 +1,17 @@
+[project]
+name = "flash-electrodefect-sim"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = [
+    "ase>=3.28.0",
+    "cuequivariance>=0.10.0",
+    "cuequivariance-torch>=0.10.0",
+    "mace-torch>=0.3.16",
+    "networkx>=3.6.1",
+    "numpy>=2.4.6",
+    "pandas>=3.0.3",
+    "pytest>=9.0.3",
+    "pyyaml>=6.0.3",
+    "scipy>=1.17.1",
+    "torch>=2.12.0",
+]

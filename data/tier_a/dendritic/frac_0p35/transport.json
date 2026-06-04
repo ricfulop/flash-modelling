@@ -1,0 +1,47 @@
+{
+  "material": "W",
+  "morphology": "dendritic",
+  "target_frac": 0.35,
+  "geometry": {
+    "frac": 0.297119140625,
+    "n_defects": 2434,
+    "spanning": true,
+    "p_c_bcc": 0.246,
+    "D_f": 2.6538289139873488,
+    "d_s": 1.827275176131207,
+    "d_w": 2.904684470793458,
+    "regime": "intermediate critical network"
+  },
+  "electronic": {
+    "n_sites_exact": 700,
+    "bandwidth_eV": 3.1428645718697874,
+    "r_stat": 0.403439273056002,
+    "pr_frac_EF": 0.001995321984323326,
+    "xi_over_a": 0.1974574499889744,
+    "kF_l": 0.055542857142857144,
+    "W_over_B": 0.9545431982184353,
+    "diagnostic_note": "kF_l is a TB connectivity proxy until DFT/Kubo calibration; frozen regime thresholds are otherwise unchanged."
+  },
+  "regime_decision": {
+    "regime": "QUANTUM_PERCOLATION_FRACTON",
+    "confidence": "strong",
+    "rationale": [
+      "kF*l=0.06 <= 2.0: at/below Ioffe-Regel; band transport not a safe zeroth-order picture",
+      "<r>=0.403 <= 0.42 (Poisson/localized)",
+      "PR/N(E_F)=0.002 <= 0.01 (localized at E_F)",
+      "xi/a=0.2 < 5.0 (finite localization length)",
+      "d_s=1.83 in [1.0,1.9] on a spanning backbone: geometry-driven (fracton), NOT disorder-driven Anderson"
+    ],
+    "flags": [
+      "manuscript 'Anderson' label would be imprecise here -> use beyond-IR/percolation taxonomy"
+    ]
+  },
+  "kpm_dos": {
+    "ran": true,
+    "device": "cuda",
+    "moments": 2048,
+    "random_vectors": 20,
+    "energies": 2000,
+    "dos_file": "kpm_dos.npz"
+  }
+}

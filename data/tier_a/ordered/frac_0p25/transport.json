@@ -1,0 +1,48 @@
+{
+  "material": "W",
+  "morphology": "ordered",
+  "target_frac": 0.25,
+  "geometry": {
+    "frac": 0.25,
+    "n_defects": 2048,
+    "spanning": true,
+    "p_c_bcc": 0.246,
+    "D_f": 2.68334840268589,
+    "d_s": 1.5725421277871015,
+    "d_w": 3.4127523266571274,
+    "regime": "Alexander-Orbach / quantum-percolation (fracton, NOT Anderson)",
+    "spectral_t_max": 1000,
+    "spectral_walkers": 1000
+  },
+  "electronic": {
+    "n_sites_exact": 700,
+    "bandwidth_eV": 0.5120920417221695,
+    "r_stat": 0.6797183157624759,
+    "pr_frac_EF": 0.015200710418385013,
+    "xi_over_a": 0.1540455978920953,
+    "kF_l": 0.19142857142857142,
+    "W_over_B": 0.0,
+    "diagnostic_note": "kF_l is a TB connectivity proxy until DFT/Kubo calibration; frozen regime thresholds are otherwise unchanged."
+  },
+  "regime_decision": {
+    "regime": "INCONCLUSIVE",
+    "confidence": "split",
+    "rationale": [
+      "kF*l=0.19 <= 2.0: at/below Ioffe-Regel; band transport not a safe zeroth-order picture",
+      "<r>=0.680 >= 0.5 (GOE/extended)",
+      "PR/N(E_F)=0.015 near mobility edge (no vote)",
+      "xi/a=0.2 < 5.0 (finite localization length)"
+    ],
+    "flags": [
+      "localization votes tied: {'extended': 1, 'localized': 1}"
+    ]
+  },
+  "kpm_dos": {
+    "ran": true,
+    "device": "cuda",
+    "moments": 2048,
+    "random_vectors": 20,
+    "energies": 2000,
+    "dos_file": "kpm_dos.npz"
+  }
+}

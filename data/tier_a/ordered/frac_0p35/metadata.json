@@ -1,0 +1,11 @@
+{
+  "material": "W",
+  "morphology": "ordered",
+  "target_frac": 0.35,
+  "seed": 1,
+  "supercell": [
+    16,
+    16,
+    16
+  ]
+}

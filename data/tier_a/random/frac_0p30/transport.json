@@ -1,0 +1,49 @@
+{
+  "material": "W",
+  "morphology": "random",
+  "target_frac": 0.3,
+  "geometry": {
+    "frac": 0.1702880859375,
+    "n_defects": 1395,
+    "spanning": true,
+    "p_c_bcc": 0.246,
+    "D_f": 2.47739747544327,
+    "d_s": 1.3616667237944267,
+    "d_w": 3.638772149090554,
+    "regime": "Alexander-Orbach / quantum-percolation (fracton, NOT Anderson)",
+    "spectral_t_max": 1000,
+    "spectral_walkers": 1000
+  },
+  "electronic": {
+    "n_sites_exact": 700,
+    "bandwidth_eV": 3.0497472261199077,
+    "r_stat": 0.379842085409322,
+    "pr_frac_EF": 0.0018364512127008407,
+    "xi_over_a": 0.18229156804283794,
+    "kF_l": 0.0643047619047619,
+    "W_over_B": 0.9836880821814209,
+    "diagnostic_note": "kF_l is a TB connectivity proxy until DFT/Kubo calibration; frozen regime thresholds are otherwise unchanged."
+  },
+  "regime_decision": {
+    "regime": "QUANTUM_PERCOLATION_FRACTON",
+    "confidence": "strong",
+    "rationale": [
+      "kF*l=0.06 <= 2.0: at/below Ioffe-Regel; band transport not a safe zeroth-order picture",
+      "<r>=0.380 <= 0.42 (Poisson/localized)",
+      "PR/N(E_F)=0.002 <= 0.01 (localized at E_F)",
+      "xi/a=0.2 < 5.0 (finite localization length)",
+      "d_s=1.36 in [1.0,1.9] on a spanning backbone: geometry-driven (fracton), NOT disorder-driven Anderson"
+    ],
+    "flags": [
+      "manuscript 'Anderson' label would be imprecise here -> use beyond-IR/percolation taxonomy"
+    ]
+  },
+  "kpm_dos": {
+    "ran": true,
+    "device": "cuda",
+    "moments": 2048,
+    "random_vectors": 20,
+    "energies": 2000,
+    "dos_file": "kpm_dos.npz"
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "material": "W",
+  "morphology": "ordered",
+  "target_frac": 0.35,
+  "geometry": {
+    "frac": 0.34375,
+    "n_defects": 2816,
+    "spanning": true,
+    "p_c_bcc": 0.246,
+    "D_f": 2.8115944975517526,
+    "d_s": 1.6293068199991179,
+    "d_w": 3.451276902595025,
+    "regime": "intermediate critical network",
+    "spectral_t_max": 1000,
+    "spectral_walkers": 1000
+  },
+  "electronic": {
+    "n_sites_exact": 700,
+    "bandwidth_eV": 0.0,
+    "r_stat": NaN,
+    "pr_frac_EF": 0.0014285714285714286,
+    "xi_over_a": Infinity,
+    "kF_l": 0.0,
+    "W_over_B": Infinity,
+    "diagnostic_note": "kF_l is a TB connectivity proxy until DFT/Kubo calibration; frozen regime thresholds are otherwise unchanged."
+  },
+  "regime_decision": {
+    "regime": "INCONCLUSIVE",
+    "confidence": "split",
+    "rationale": [
+      "kF*l=0.00 <= 2.0: at/below Ioffe-Regel; band transport not a safe zeroth-order picture",
+      "<r>=nan intermediate (no vote)",
+      "PR/N(E_F)=0.001 <= 0.01 (localized at E_F)",
+      "xi/a=inf >= 5.0 (delocalized)"
+    ],
+    "flags": [
+      "localization votes tied: {'extended': 1, 'localized': 1}"
+    ]
+  },
+  "kpm_dos": {
+    "ran": true,
+    "device": "cuda",
+    "moments": 2048,
+    "random_vectors": 20,
+    "energies": 2000,
+    "dos_file": "kpm_dos.npz"
+  }
+}

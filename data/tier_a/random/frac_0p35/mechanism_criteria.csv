@@ -1,0 +1,4 @@
+criterion,value,verdict
+Ioffe-Regel  (kF*l <~ 1 => band invalid),kF*l = 0.05,band transport INVALID
+Anderson 3D  (W/B >~ 16.5 => localized),W/B = 1.0,extended (not Anderson)
+Holstein  (E_p/2t > 1 => small polaron),E_p/2t = 65.62,small-polaron hopping

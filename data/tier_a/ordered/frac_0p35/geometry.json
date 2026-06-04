@@ -1,0 +1,12 @@
+{
+  "frac": 0.34375,
+  "n_defects": 2816,
+  "spanning": true,
+  "p_c_bcc": 0.246,
+  "D_f": 2.8115944975517526,
+  "d_s": 1.6293068199991179,
+  "d_w": 3.451276902595025,
+  "regime": "intermediate critical network",
+  "spectral_t_max": 1000,
+  "spectral_walkers": 1000
+}
