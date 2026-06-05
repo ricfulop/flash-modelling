@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import socket
 import subprocess
 import time
 from datetime import datetime, timezone
@@ -55,6 +56,15 @@ def active_followups() -> list[Path]:
     return roots
 
 
+def peer_available(host: str = "dgx-peer") -> bool:
+    """Return whether the peer alias resolves before attempting rsync/ssh imports."""
+    try:
+        socket.getaddrinfo(host, None)
+        return True
+    except OSError:
+        return False
+
+
 def run_synthesis(include_peer: bool) -> int:
     cmd = [
         "python",
@@ -62,6 +72,9 @@ def run_synthesis(include_peer: bool) -> int:
     ]
     for root in latest_followups():
         cmd.extend(["--extra-bigdft", str(root)])
+    if include_peer and not peer_available():
+        log("peer import requested but dgx-peer does not resolve; running local-only synthesis")
+        include_peer = False
     if not include_peer:
         cmd.extend(["--peer-bigdft-remote", ""])
     log("running synthesis: " + " ".join(cmd))

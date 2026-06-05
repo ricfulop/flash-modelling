@@ -28,7 +28,8 @@ REPO = Path(__file__).resolve().parents[1]
 RUNS = REPO / "runs"
 SEED = 20260603
 
-PRIMARY = {
+PRIMARY_V1 = {
+    "profile": "primary_v1",
     "material": "W",
     "morphology": "ordered",
     "shape": [3, 3, 4],
@@ -47,18 +48,40 @@ PRIMARY = {
     "positive_threshold_eV": -0.05,
 }
 
+LOCAL_V2 = {
+    **PRIMARY_V1,
+    "profile": "local_v2",
+    "displacement_A": 0.20,
+    "n_intermediate_images": 7,
+    "neb_steps": 80,
+    "max_adjacent_mobile_displacement_A": 0.5,
+    "positive_threshold_eV": -0.02,
+}
+
+PROFILES = {
+    PRIMARY_V1["profile"]: PRIMARY_V1,
+    LOCAL_V2["profile"]: LOCAL_V2,
+}
+
 
 def now() -> str:
     return datetime.now(timezone.utc).isoformat(timespec="seconds")
 
 
-def default_run_root() -> Path:
+def profile_config(name: str) -> dict:
+    if name not in PROFILES:
+        raise ValueError(f"unknown profile {name!r}; choose one of {sorted(PROFILES)}")
+    return dict(PROFILES[name])
+
+
+def default_run_root(profile: str) -> Path:
     label = os.environ.get("ELECTRODEFECT_CHGNET_LABEL", socket.gethostname())
-    return RUNS / datetime.now().strftime(f"chgnet_field_neb_%Y%m%d_%H%M%S_{label}")
+    prefix = "chgnet_field_neb" if profile == "primary_v1" else f"chgnet_field_neb_{profile}"
+    return RUNS / datetime.now().strftime(f"{prefix}_%Y%m%d_%H%M%S_{label}")
 
 
-def ensure_run_root(path: str | None) -> Path:
-    root = Path(path) if path else default_run_root()
+def ensure_run_root(path: str | None, profile: str) -> Path:
+    root = Path(path) if path else default_run_root(profile)
     root.mkdir(parents=True, exist_ok=True)
     return root
 
@@ -95,16 +118,16 @@ def heartbeat(run_root: Path, message: str) -> None:
         fh.write(f"{now()} {message}\n")
 
 
-def make_seed_atoms():
-    material = PRIMARY["material"]
+def make_seed_atoms(primary: dict):
+    material = primary["material"]
     params = build.material_params(material)
-    nx_, ny, nz = PRIMARY["shape"]
+    nx_, ny, nz = primary["shape"]
     net = percolation.ordered_superlattice(
         nx_=nx_,
         ny=ny,
         nz=nz,
         a=params["a"],
-        frac=PRIMARY["frac"],
+        frac=primary["frac"],
         seed=SEED,
     )
     slab = build.w_slab(
@@ -112,25 +135,25 @@ def make_seed_atoms():
         ny=ny,
         nz=nz,
         a=params["a"],
-        vacuum=PRIMARY["vacuum_A"],
+        vacuum=primary["vacuum_A"],
         material=material,
     )
     cfgs = build.make_configs(
         slab,
         net,
-        surface_band=PRIMARY["surface_band_A"],
+        surface_band=primary["surface_band_A"],
         material=material,
         a=params["a"],
     )
     return cfgs["separated"], net
 
 
-def build_endpoints(run_root: Path) -> dict:
+def build_endpoints(run_root: Path, primary: dict) -> dict:
     from ase.io import write
 
     heartbeat(run_root, "build-endpoints start")
-    atoms, net = make_seed_atoms()
-    params = build.material_params(PRIMARY["material"])
+    atoms, net = make_seed_atoms(primary)
+    params = build.material_params(primary["material"])
     initial = mlip_al.apply_bottom_constraint(atoms, lattice_a=params["a"])
     final = initial.copy()
     fixed = mlip_al.fixed_atom_mask(initial)
@@ -140,8 +163,8 @@ def build_endpoints(run_root: Path) -> dict:
         raise ValueError("endpoint generation has no mobile atoms")
     z = positions[:, 2]
     mobile_atom_index = int(mobile_candidates[np.argmax(z[mobile_candidates])])
-    direction = normalized_vector(PRIMARY["endpoint_direction"])
-    displacement = float(PRIMARY["displacement_A"]) * direction
+    direction = normalized_vector(primary["endpoint_direction"])
+    displacement = float(primary["displacement_A"]) * direction
     positions[mobile_atom_index] += displacement
     final.set_positions(positions)
     final.set_constraint(initial.constraints)
@@ -154,12 +177,12 @@ def build_endpoints(run_root: Path) -> dict:
     charges = mobile_atom_charges(
         len(initial),
         mobile_atom_index,
-        charge_e=PRIMARY["mobile_charge_e"],
+        charge_e=primary["mobile_charge_e"],
     )
     manifest = {
         "state": "completed",
         "created_at": now(),
-        "primary": PRIMARY,
+        "primary": primary,
         "seed": SEED,
         "defect_fraction_realized": float(net.frac),
         "atom_count": len(initial),
@@ -175,13 +198,13 @@ def build_endpoints(run_root: Path) -> dict:
         "initial_path": endpoint_dir / "initial.xyz",
         "final_path": endpoint_dir / "final.xyz",
     }
-    manifest["endpoint_qc"] = validate_endpoints(initial, final, mobile_atom_index, fixed)
+    manifest["endpoint_qc"] = validate_endpoints(initial, final, mobile_atom_index, fixed, primary)
     write_json(run_root / "endpoint_manifest.json", manifest)
     heartbeat(run_root, "build-endpoints completed")
     return manifest
 
 
-def validate_endpoints(initial, final, mobile_atom_index: int, fixed_mask: np.ndarray) -> dict:
+def validate_endpoints(initial, final, mobile_atom_index: int, fixed_mask: np.ndarray, primary: dict) -> dict:
     displacement = np.linalg.norm(
         final.get_positions()[mobile_atom_index] - initial.get_positions()[mobile_atom_index]
     )
@@ -196,7 +219,7 @@ def validate_endpoints(initial, final, mobile_atom_index: int, fixed_mask: np.nd
         "same_atom_count": len(initial) == len(final),
         "same_cell": bool(np.allclose(initial.cell.array, final.cell.array)),
         "mobile_displacement_A": float(displacement),
-        "mobile_displacement_ok": bool(abs(displacement - PRIMARY["displacement_A"]) <= 1e-6),
+        "mobile_displacement_ok": bool(abs(displacement - primary["displacement_A"]) <= 1e-6),
         "min_pair_initial_A": mlip_al.min_pair_distance(initial),
         "min_pair_final_A": mlip_al.min_pair_distance(final),
         "fixed_atoms_unchanged": fixed_unchanged,
@@ -207,8 +230,8 @@ def validate_endpoints(initial, final, mobile_atom_index: int, fixed_mask: np.nd
         and qc["same_atom_count"]
         and qc["same_cell"]
         and qc["mobile_displacement_ok"]
-        and qc["min_pair_initial_A"] > PRIMARY["min_pair_distance_A"]
-        and qc["min_pair_final_A"] > PRIMARY["min_pair_distance_A"]
+        and qc["min_pair_initial_A"] > primary["min_pair_distance_A"]
+        and qc["min_pair_final_A"] > primary["min_pair_distance_A"]
         and qc["fixed_atoms_unchanged"]
     )
     return qc
@@ -285,14 +308,14 @@ def load_endpoints(run_root: Path):
     return initial, final, manifest
 
 
-def make_images(initial, final):
+def make_images(initial, final, primary: dict):
     images = [initial.copy()]
-    images.extend(initial.copy() for _ in range(PRIMARY["n_intermediate_images"]))
+    images.extend(initial.copy() for _ in range(primary["n_intermediate_images"]))
     images.append(final.copy())
     return images
 
 
-def run_neb(images, calc, out_dir: Path):
+def run_neb(images, calc, out_dir: Path, primary: dict):
     from ase.io import write
     from ase.mep import NEB
     from ase.optimize import FIRE
@@ -306,7 +329,7 @@ def run_neb(images, calc, out_dir: Path):
     for image in images:
         image.calc = calc
     opt = FIRE(neb, logfile=str(out_dir / "optimizer.log"))
-    opt.run(fmax=PRIMARY["fmax_eV_A"], steps=PRIMARY["neb_steps"])
+    opt.run(fmax=primary["fmax_eV_A"], steps=primary["neb_steps"])
     energies = [float(image.get_potential_energy()) for image in images]
     barrier = float(max(energies) - energies[0])
     for idx, image in enumerate(images):
@@ -320,7 +343,7 @@ def run_neb(images, calc, out_dir: Path):
     }
 
 
-def image_qc(images, mobile_atom_index: int) -> dict:
+def image_qc(images, mobile_atom_index: int, primary: dict) -> dict:
     min_pairs = [mlip_al.min_pair_distance(image) for image in images]
     finite_positions = [bool(np.isfinite(image.get_positions()).all()) for image in images]
     mobile_positions = np.array([image.get_positions()[mobile_atom_index] for image in images])
@@ -330,11 +353,11 @@ def image_qc(images, mobile_atom_index: int) -> dict:
     qc = {
         "finite_positions_all": bool(all(finite_positions)),
         "min_pair_distances_A": min_pairs,
-        "min_pair_pass": bool(min(min_pairs) > PRIMARY["min_pair_distance_A"]),
+        "min_pair_pass": bool(min(min_pairs) > primary["min_pair_distance_A"]),
         "adjacent_mobile_displacements_A": adjacent_mobile,
         "adjacent_mobile_pass": bool(
             len(adjacent_mobile) == 0
-            or np.nanmax(adjacent_mobile) < PRIMARY["max_adjacent_mobile_displacement_A"]
+            or np.nanmax(adjacent_mobile) < primary["max_adjacent_mobile_displacement_A"]
         ),
         "same_atom_count_all": bool(len(set(atom_counts)) == 1),
         "same_cell_all": bool(all(cells_match)),
@@ -349,30 +372,32 @@ def image_qc(images, mobile_atom_index: int) -> dict:
     return qc
 
 
-def run_primary_nebs(run_root: Path, device: str) -> dict:
+def run_primary_nebs(run_root: Path, device: str, primary: dict | None = None) -> dict:
     heartbeat(run_root, "run-neb start")
     initial, final, manifest = load_endpoints(run_root)
+    primary = primary or manifest.get("primary", PRIMARY_V1)
     mobile = int(manifest["mobile_atom_index"])
 
-    no_field_images = make_images(initial, final)
+    no_field_images = make_images(initial, final, primary)
     no_field = run_neb(
         no_field_images,
         make_chgnet_calculator(device=device),
         run_root / "no_field",
+        primary,
     )
-    no_field["image_qc"] = image_qc(no_field_images, mobile)
+    no_field["image_qc"] = image_qc(no_field_images, mobile, primary)
     write_json(run_root / "no_field" / "neb_summary.json", no_field)
 
-    charges = mobile_atom_charges(len(initial), mobile, PRIMARY["mobile_charge_e"])
+    charges = mobile_atom_charges(len(initial), mobile, primary["mobile_charge_e"])
     field_calc = ElectricFieldCalculator(
         make_chgnet_calculator(device=device),
         charges=charges,
-        field_strength=PRIMARY["field_strength_V_A"],
+        field_strength=primary["field_strength_V_A"],
         direction=manifest["field_direction"],
     )
-    field_images = make_images(initial, final)
-    field = run_neb(field_images, field_calc, run_root / "field_primary")
-    field["image_qc"] = image_qc(field_images, mobile)
+    field_images = make_images(initial, final, primary)
+    field = run_neb(field_images, field_calc, run_root / "field_primary", primary)
+    field["image_qc"] = image_qc(field_images, mobile, primary)
     field["field_spec"] = field_calc.field_spec(len(initial)).__dict__
     write_json(run_root / "field_primary" / "neb_summary.json", field)
 
@@ -385,6 +410,7 @@ def summarize_comparison(run_root: Path) -> dict:
     no_field = read_json(run_root / "no_field" / "neb_summary.json")
     field = read_json(run_root / "field_primary" / "neb_summary.json")
     endpoint_manifest = read_json(run_root / "endpoint_manifest.json")
+    primary = endpoint_manifest.get("primary", PRIMARY_V1)
     barrier_delta = float(field["barrier_eV"] - no_field["barrier_eV"])
     qc_passes = bool(
         endpoint_manifest["endpoint_qc"]["passes"]
@@ -406,7 +432,7 @@ def summarize_comparison(run_root: Path) -> dict:
         blocking_reasons.append("field_primary_image_qc_failed")
     if not qc_passes:
         classification = "blocked"
-    elif barrier_delta <= PRIMARY["positive_threshold_eV"]:
+    elif barrier_delta <= primary["positive_threshold_eV"]:
         classification = "positive_exploratory"
     else:
         classification = "negative"
@@ -416,10 +442,10 @@ def summarize_comparison(run_root: Path) -> dict:
         "barrier_no_field_eV": no_field["barrier_eV"],
         "barrier_field_eV": field["barrier_eV"],
         "barrier_delta_eV": barrier_delta,
-        "positive_threshold_eV": PRIMARY["positive_threshold_eV"],
+        "positive_threshold_eV": primary["positive_threshold_eV"],
         "qc_passes": qc_passes,
         "blocking_reasons": blocking_reasons,
-        "primary": PRIMARY,
+        "primary": primary,
         "no_field_summary": run_root / "no_field" / "neb_summary.json",
         "field_summary": run_root / "field_primary" / "neb_summary.json",
     }
@@ -460,20 +486,22 @@ def parser() -> argparse.ArgumentParser:
     p.add_argument("cmd", choices=["setup-smoke", "validate", "build-endpoints", "run-neb", "summarize", "all"])
     p.add_argument("--run-root", default=None)
     p.add_argument("--device", default="cuda")
+    p.add_argument("--profile", choices=sorted(PROFILES), default="primary_v1")
     return p
 
 
 def main() -> int:
     args = parser().parse_args()
-    run_root = ensure_run_root(args.run_root)
+    primary = profile_config(args.profile)
+    run_root = ensure_run_root(args.run_root, args.profile)
     if args.cmd == "setup-smoke":
         run_setup_smoke(run_root, args.device)
     elif args.cmd == "validate":
         validate_wrapper(run_root)
     elif args.cmd == "build-endpoints":
-        build_endpoints(run_root)
+        build_endpoints(run_root, primary)
     elif args.cmd == "run-neb":
-        run_primary_nebs(run_root, args.device)
+        run_primary_nebs(run_root, args.device, primary)
     elif args.cmd == "summarize":
         summarize_comparison(run_root)
     elif args.cmd == "all":
@@ -481,10 +509,10 @@ def main() -> int:
         validation = validate_wrapper(run_root)
         if not validation["passes"]:
             raise SystemExit("wrapper validation failed")
-        manifest = build_endpoints(run_root)
+        manifest = build_endpoints(run_root, primary)
         if not manifest["endpoint_qc"]["passes"]:
             raise SystemExit("endpoint validation failed")
-        run_primary_nebs(run_root, args.device)
+        run_primary_nebs(run_root, args.device, primary)
     print(run_root)
     return 0
 
