@@ -59,6 +59,23 @@ ensure_munge() {
   systemctl is-active --quiet munge
 }
 
+maybe_reset_slurm_state() {
+  local new_name state_dir="/var/spool/slurm/ctld"
+  new_name="$(grep '^ClusterName=' /etc/slurm/slurm.conf | head -1 | cut -d= -f2- | tr -d '[:space:]')"
+
+  systemctl stop slurmctld slurmd 2>/dev/null || true
+
+  if [[ -f "${state_dir}/clustername" ]]; then
+    local old_name
+    old_name="$(tr -d '[:space:]' < "${state_dir}/clustername")"
+    if [[ "${old_name}" != "${new_name}" ]]; then
+      echo "Cluster rename ${old_name} -> ${new_name}; clearing Slurm controller/node state"
+      rm -rf "${state_dir:?}/"*
+      rm -rf /var/spool/slurm/d/*
+    fi
+  fi
+}
+
 install_controller() {
   if [[ "${HOST}" != "${CONTROLLER_HOST}" ]]; then
     echo "Run 'controller' on ${CONTROLLER_HOST}, not ${HOST}" >&2
@@ -67,6 +84,7 @@ install_controller() {
 
   install_common_files
   ensure_munge
+  maybe_reset_slurm_state
 
   systemctl enable slurmctld slurmd >/dev/null 2>&1 || true
   systemctl restart slurmctld
@@ -127,6 +145,7 @@ systemctl restart munge
 systemctl is-active --quiet munge
 
 systemctl disable --now slurmctld >/dev/null 2>&1 || true
+rm -rf /var/spool/slurm/d/*
 systemctl enable slurmd >/dev/null 2>&1 || true
 systemctl restart slurmd
 sleep 2

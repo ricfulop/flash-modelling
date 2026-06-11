@@ -34,6 +34,16 @@ If a node stays DOWN after reboot:
 sudo env/slurm/install-cluster.sh resume-nodes
 ```
 
+If `slurmctld` fails with **CLUSTER NAME MISMATCH** (`local` vs `flash-dgx`), clear stale state and reinstall:
+
+```bash
+sudo systemctl stop slurmctld slurmd
+sudo rm -rf /var/spool/slurm/ctld/* /var/spool/slurm/d/*
+sudo env/slurm/install-cluster.sh controller
+```
+
+Recent installer versions do this automatically when the cluster name changes.
+
 ## Environment profiles
 
 Profiles live in `env/slurm/profiles/` and are installed to `/etc/slurm/flash-profiles/`:
