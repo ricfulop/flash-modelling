@@ -23,7 +23,7 @@ REPO = Path(__file__).resolve().parents[1]
 RUNS = REPO / "runs"
 BASE = Path("/home/ricfulop/Desktop/Cursor")
 CUDA_ACTIVATE = Path(os.environ.get("BIGDFT_CUDA_ACTIVATE", str(BASE / "use_bigdft_cuda.sh")))
-BIGDFT_SOURCE = BASE / "bigdft-suite"
+BIGDFT_SOURCE = Path(os.environ.get("BIGDFT_SOURCE", str(BASE / "bigdft-suite")))
 
 
 @dataclass(frozen=True)

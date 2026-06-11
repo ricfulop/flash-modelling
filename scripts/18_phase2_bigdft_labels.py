@@ -17,8 +17,11 @@ from pathlib import Path
 
 import yaml
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
-from electrodefect import dft_bigdft
+DFT_BIGDFT_PATH = Path(__file__).resolve().parents[1] / "src" / "electrodefect" / "dft_bigdft.py"
+DFT_SPEC = importlib.util.spec_from_file_location("dft_bigdft_direct", DFT_BIGDFT_PATH)
+dft_bigdft = importlib.util.module_from_spec(DFT_SPEC)
+assert DFT_SPEC.loader is not None
+DFT_SPEC.loader.exec_module(dft_bigdft)
 
 
 REPO = Path(__file__).resolve().parents[1]
